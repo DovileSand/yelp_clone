@@ -6,8 +6,8 @@ feature 'reviewing' do
   scenario 'allows users to leave a review using a form' do
     visit '/restaurants'
     click_link 'Review Ovens'
-    fill_in "Thoughts", with: "awsome"
-    select '4', from: 'Raiting'
+    fill_in "Thoughts", with: "awesome"
+    select '4', from: 'Rating'
     click_button 'Leave Review'
 
     expect(current_path).to eq '/restaurants'
