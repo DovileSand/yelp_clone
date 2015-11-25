@@ -59,7 +59,7 @@ feature 'restaurants:' do
     scenario 'removes a restaurant when a user clicks a delete link' do
       visit '/restaurants'
       click_link 'Delete Ovens'
-      expect(page).to have_content 'Ovens'
+      expect(page).not_to have_content 'Ovens'
       expect(page).to have_content 'Restaurant deleted successfully'
     end
   end
