@@ -56,26 +56,54 @@ feature 'restaurants:' do
   end
 
   context 'editing restaurants:' do
-    before{Restaurant.create name: 'Ovens'}
     scenario 'lets a user edit a restaurant' do
       visit '/restaurants'
       sign_in
+      create_restaurant
       click_link 'Edit Ovens'
       fill_in 'Name', with: "Best Aubergine Bakes"
       click_button 'Update Restaurant'
       expect(page).to have_content 'Best Aubergine Bakes'
       expect(current_path).to eq '/restaurants'
     end
+
+    scenario 'cannot edit restaurant when user did not create restaurant' do
+      sign_in
+      visit '/restaurants'
+      click_link 'Add restaurant'
+      fill_in 'Name', with: 'MUMs'
+      click_button 'Create Restaurant'
+      click_link('Sign out')
+      sign_in(email: "test2@test.com", password: "password2")
+      visit '/restaurants'
+      click_link 'Edit MUMs'
+      fill_in 'Name', with: 'new_MUMs'
+      click_button 'Update Restaurant'
+      expect(page).to have_content 'You cannot edit restaurant that you did not create'
+    end
   end
 
   context 'deleting restaurants:' do
-    before{Restaurant.create name: 'Ovens'}
     scenario 'removes a restaurant when a user clicks a delete link' do
       visit '/restaurants'
       sign_in
+      create_restaurant
       click_link 'Delete Ovens'
       expect(page).not_to have_content 'Ovens'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    scenario 'cannot delete restaurant when user did not create restaurant' do
+      sign_in
+      visit '/restaurants'
+      click_link 'Add restaurant'
+      fill_in 'Name', with: 'MUMs'
+      click_button 'Create Restaurant'
+      click_link('Sign out')
+      sign_in(email: "test2@test.com", password: "password2")
+      visit '/restaurants'
+      click_link 'Delete MUMs'
+      expect(page).to have_content 'You cannot delete restaurant that you did not create'
     end
   end
 end
