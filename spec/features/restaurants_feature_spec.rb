@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'restaurants:' do
-  context 'no restaurants have been added' do
+  context 'no restaurants have been added:' do
     scenario 'should display a prompt to add a restaurant' do
       visit '/restaurants'
       expect(page).to have_content 'No restaurants yet'
@@ -9,7 +9,7 @@ feature 'restaurants:' do
     end
   end
 
-  context 'restaurants have been added' do
+  context 'restaurants have been added:' do
     before do
       Restaurant.create(name: 'Ovens')
     end
@@ -21,9 +21,10 @@ feature 'restaurants:' do
     end
   end
 
-  context 'creating restaurants' do
+  context 'creating restaurants:' do
     scenario 'prompts user to fill out a form then displays the new restaurant' do
       visit '/restaurants'
+      sign_in
       click_link 'Add restaurant'
       fill_in 'Name', with: 'Ovens'
       click_button 'Create Restaurant'
@@ -31,9 +32,10 @@ feature 'restaurants:' do
       expect(current_path).to eq '/restaurants'
     end
 
-   context 'an invalid restaurant' do
+   context 'an invalid restaurant:' do
      it 'does not let you submit a name that is too short' do
        visit '/restaurants'
+       sign_in
        click_link 'Add restaurant'
        fill_in 'Name', with: 'Ov'
        click_button 'Create Restaurant'
@@ -43,7 +45,7 @@ feature 'restaurants:' do
    end
   end
 
-  context 'viewing restaurants' do
+  context 'viewing restaurants:' do
     let!(:ovens){Restaurant.create(name:'Ovens')}
     scenario 'lets a user view a restaurant' do
       visit '/restaurants'
@@ -53,10 +55,11 @@ feature 'restaurants:' do
     end
   end
 
-  context 'editing restaurants' do
+  context 'editing restaurants:' do
     before{Restaurant.create name: 'Ovens'}
     scenario 'lets a user edit a restaurant' do
       visit '/restaurants'
+      sign_in
       click_link 'Edit Ovens'
       fill_in 'Name', with: "Best Aubergine Bakes"
       click_button 'Update Restaurant'
@@ -65,14 +68,14 @@ feature 'restaurants:' do
     end
   end
 
-  context 'deleting restaurants' do
+  context 'deleting restaurants:' do
     before{Restaurant.create name: 'Ovens'}
     scenario 'removes a restaurant when a user clicks a delete link' do
       visit '/restaurants'
+      sign_in
       click_link 'Delete Ovens'
       expect(page).not_to have_content 'Ovens'
       expect(page).to have_content 'Restaurant deleted successfully'
     end
   end
-
 end
